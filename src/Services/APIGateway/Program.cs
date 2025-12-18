@@ -9,6 +9,15 @@ public class Program
         var clientId = builder.Configuration["AsgardeoSettings:ClientId"];
         var clientSecret = builder.Configuration["AsgardeoSettings:ClientSecret"];
         builder.Services.AddControllers();
+        builder.Services.AddCors(options =>
+        {
+            options.AddPolicy("AllowAll", policy =>
+            {
+                policy.AllowAnyOrigin()
+                      .AllowAnyMethod()
+                      .AllowAnyHeader();
+            });
+        });
         builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme).AddJwtBearer(options =>
         {
             options.MetadataAddress = $"https://api.asgardeo.io/t/{organizationName}/oauth2/token/.well-known/openid-configuration";
@@ -85,6 +94,7 @@ public class Program
 
         var app = builder.Build();
         app.UseRouting();
+        app.UseCors("AllowAll");
         app.UseAuthentication();
         app.UseAuthorization();
         app.UseHttpLogging();
