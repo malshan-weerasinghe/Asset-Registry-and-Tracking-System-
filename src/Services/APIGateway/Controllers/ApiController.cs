@@ -7,7 +7,6 @@ using Microsoft.Extensions.Configuration;
 namespace Gateway.Controllers
 {
     [ApiController]
-    [Authorize]
     public class GatewayController : ControllerBase
     {
         // Allowed paths for different roles
@@ -264,12 +263,21 @@ namespace Gateway.Controllers
 
                 foreach (var header in response.Headers)
                 {
-                    Response.Headers[header.Key] = header.Value.ToArray();
+                    if (!header.Key.Equals("Transfer-Encoding", StringComparison.OrdinalIgnoreCase) && 
+                        !header.Key.Equals("Connection", StringComparison.OrdinalIgnoreCase) &&
+                        !header.Key.StartsWith("Access-Control-", StringComparison.OrdinalIgnoreCase))
+                    {
+                        Response.Headers[header.Key] = header.Value.ToArray();
+                    }
                 }
 
                 foreach (var header in response.Content.Headers)
                 {
-                    Response.Headers[header.Key] = header.Value.ToArray();
+                    if (!header.Key.Equals("Content-Length", StringComparison.OrdinalIgnoreCase) &&
+                        !header.Key.StartsWith("Access-Control-", StringComparison.OrdinalIgnoreCase))
+                    {
+                        Response.Headers[header.Key] = header.Value.ToArray();
+                    }
                 }
 
                 return result;
