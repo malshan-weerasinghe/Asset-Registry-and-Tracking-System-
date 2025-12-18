@@ -66,7 +66,13 @@ namespace AsgardeoMicroservice.Services
             if (!string.IsNullOrEmpty(attributes))
                 url += $"?attributes={Uri.EscapeDataString(attributes)}";
             var response = await _httpClient.PostAsync(url, stringContent);
-            response.EnsureSuccessStatusCode();
+            
+            if (!response.IsSuccessStatusCode)
+            {
+                var errorContent = await response.Content.ReadAsStringAsync();
+                throw new HttpRequestException($"Asgardeo API error: {response.StatusCode} - {errorContent}");
+            }
+            
             return await response.Content.ReadAsStringAsync();
         }
 

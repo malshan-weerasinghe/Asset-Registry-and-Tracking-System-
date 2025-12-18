@@ -51,6 +51,12 @@ services:
       - "5003:8080"
     environment:
       ASPNETCORE_ENVIRONMENT: Development
+      AsgardeoSettings__OrganizationName: "group12linux"
+      AsgardeoSettings__ClientId: "Cb0TPnGeXut7j4qNKVBsHPFJ54ka"
+      AsgardeoSettings__ClientSecret: "9rfj_fR60MQ1HcwiUvfkwIfHhPd0jl6bzNr5uB6aiXIa"
+      AsgardeoSettings__Scope: "internal_user_mgt_create internal_user_mgt_list internal_user_mgt_view internal_user_mgt_delete internal_user_mgt_update internal_role_mgt_users_update"
+      AsgardeoSettings__AuditorRoleId: "853b92a3-8e33-4592-a3c5-db24ab4d4486"
+      AsgardeoSettings__UserRoleId: "35355519-f472-4634-b28e-fb42d5d2b92e"
     restart: unless-stopped
 
   # ============================
